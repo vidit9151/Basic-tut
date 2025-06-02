@@ -3,7 +3,7 @@ import noteModel from "../models/note.model.js";
 
 export const getAllNotes = async (req, res) => {
   try {
-    const notes = await noteModel.find();
+    const notes = await noteModel.find().sort({ createdAt: -1 });
     res.status(200).json(notes);
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
@@ -62,5 +62,17 @@ export const deleteNote = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
     console.error("🔴 Error in deleting note controller", error);
+  }
+};
+
+export const getNoteById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const note = await noteModel.findById(id);
+    if (!note) return res.status(404).json({ message: "no note found" });
+    res.status(200).json({ message: "note found ", note });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+    console.error("🔴 Error in findind a note controller", error);
   }
 };
