@@ -9,11 +9,12 @@ const port = process.env.PORT || 5001;
 const app = express();
 
 app.use(rateLimiter);
-connectDB();
+
 /*middle ware to access json files*/ app.use(express.json());
 
 app.use("/api/notes", noteRouter);
-
-app.listen(port, () => {
-  console.log("🔱 server chaalu at port :", port);
-});
+connectDB().then(() =>
+  app.listen(port, () => {
+    console.log("🔱 server chaalu at port :", port);
+  })
+);
